@@ -1,13 +1,25 @@
-chrome.extension.sendMessage({}, function(response) {
-	var readyStateCheckInterval = setInterval(function() {
-	if (document.readyState === "complete") {
-		clearInterval(readyStateCheckInterval);
+var manipulateAnchors = function() {
+  var anchors = document.getElementsByTagName('a');
+  for (var a = 0; a < anchors.length; a++) {
+    anchors[a].style.backgroundColor = 'green';
+  }
+};
 
-		// ----------------------------------------------------------
-		// This part of the script triggers when page is done loading
-		console.log("Hello. This message was sent from scripts/inject.js");
-		// ----------------------------------------------------------
+chrome.extension.sendMessage({scriptMessage: 'ready'},
+  function(response) {
+    var readyStateCheckInterval = setInterval(function() {
+      if (document.readyState === "complete") {
+        clearInterval(readyStateCheckInterval);
 
-	}
-	}, 10);
-});
+        // ----------------------------------------------------------
+        // This part of the script triggers when page is done loading
+        if (response.scriptResponse !=='') {
+          console.log('response', response.scriptResponse);
+          // console.log('pinnedState', response.pinnedState);
+          manipulateAnchors();
+        }
+        // ----------------------------------------------------------
+
+      }
+    }, 10);
+  });
