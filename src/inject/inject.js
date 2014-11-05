@@ -1,6 +1,6 @@
 /**
  * Let background.js know we're ready for tab info
- * Receive info about the tab from background.js
+ * Receive info about the tab from the background script
  *
  * response.scriptResponse: Dummy text to print to the console
  * response.tabIndex: The tab's index, used to create a new tab
@@ -16,6 +16,33 @@ chrome.extension.sendMessage({message: 'ready'}, function(response) {
       console.log('pinned:', response.pinnedState);
       console.log('index:', response.tabIndex);
 
+      if (response.pinnedState) {
+        // The tab is pinned
+        console.log('Create new tabs');
+      } else {
+        // The tab is not pinned
+        console.log('Do not create new tabs');
+      }
+
     }
   }, 10);
+  });
+
+/**
+ * Receive message from the background script regarding tab updates
+ */
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if (request.pinnedState.hasOwnProperty('pinned')) {
+      // The tab updated is related to pinnedState
+      if (request.pinnedState.pinned) {
+        // The tab was pinned
+        console.log('The tab was pinned')
+        console.log('Create new tabs');
+      } else {
+        // The tab was unpinned
+        console.log('The tab was unpinned')
+        console.log('Do not create new tabs');
+      }
+    }
   });
