@@ -16,3 +16,10 @@ chrome.extension.onMessage.addListener(
       sendResponse(pinnedOut);
     }
   });
+
+/**
+ * Listen for tab updates (e.g., a tab being pinned or unpinned)
+ */
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+   console.log(changeInfo.pinned);
+});
