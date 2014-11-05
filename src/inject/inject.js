@@ -1,3 +1,27 @@
+var pinnedLinkOut = {};
+
+/**
+ * Manipulate anchors such that they open in a new tab
+ */
+pinnedLinkOut.defineLinkBehavior = function(bool) {
+  console.log('Create new tabs');
+  // test for target="_blank"
+  //    ignore if present
+  // add target="_blank"
+  // add data-pinned
+};
+
+/**
+ * Remove the DOM changes created via defineLinkBehavior
+ */
+pinnedLinkOut.revertLinkBehavior = function() {
+  console.log('Revert tab behavior');
+  // test for data-pinned attribute
+  //    ignore if not present
+  // remove target attribute
+  // remove data-pinned attribute
+};
+
 /**
  * Let background.js know we're ready for tab info
  * Receive info about the tab from the background script
@@ -18,10 +42,10 @@ chrome.extension.sendMessage({message: 'ready'}, function(response) {
 
       if (response.pinnedState) {
         // The tab is pinned
-        console.log('Create new tabs');
+        pinnedLinkOut.defineLinkBehavior();
       } else {
         // The tab is not pinned
-        console.log('Do not create new tabs');
+        // Do nothing
       }
 
     }
@@ -37,12 +61,10 @@ chrome.runtime.onMessage.addListener(
       // The tab updated is related to pinnedState
       if (request.pinnedState.pinned) {
         // The tab was pinned
-        console.log('The tab was pinned')
-        console.log('Create new tabs');
+        pinnedLinkOut.defineLinkBehavior();
       } else {
         // The tab was unpinned
-        console.log('The tab was unpinned')
-        console.log('Do not create new tabs');
+        pinnedLinkOut.revertLinkBehavior();
       }
     }
   });
