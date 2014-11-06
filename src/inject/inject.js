@@ -2,28 +2,71 @@ var pinnedLinkOut = {};
 
 /**
  * Manipulate anchors such that they open in a new tab
+ *
+ * @param {Object} anchor The anchor element currently being iterated over
  */
-pinnedLinkOut.defineLinkBehavior = function(bool) {
+pinnedLinkOut.addTargetAttribute = function(anchor) {
   console.log('Create new tabs');
-  // test for target="_blank"
-  //    ignore if present
-  // add target="_blank"
-  // add data-pinned
+  // Test for target="_blank"
+  // We don't want to add target attributes where they already exist
+  var target = anchor.getAttribute('target');
+  if (!target) {
+    // Add target="_blank"
+    anchor.setAttribute('target', '_blank');
+    // Add data-pinned to flag anchors we've updated
+    anchor.setAttribute('data-pinned', '');
+  }
 };
 
 /**
- * Remove the DOM changes created via defineLinkBehavior
+ * Remove the DOM changes created via addTargetAttribute
+ *
+ * @param {Object} anchor The anchor element currently being iterated over
  */
-pinnedLinkOut.revertLinkBehavior = function() {
+pinnedLinkOut.removeTargetAttribute = function(anchor) {
   console.log('Revert tab behavior');
-  // test for data-pinned attribute
-  //    ignore if not present
-  // remove target attribute
-  // remove data-pinned attribute
+  // Test for the data-pinned attribute
+  // Only remove the target attribute from anchors with data-pinned
+  // This way we avoid removing attributes added by the author
+  var dataPinnned = anchor.getAttribute('data-pinned');
+  if (!dataPinnned) {
+    // Remove target attribute
+    anchor.removeAttribute('target');
+    // Remove data-pinned attribute
+    anchor.removeAttribute('data-pinned');
+  }
 };
 
 /**
- * Let background.js know we're ready for tab info
+ * Iterate over page's anchors
+ *
+ * @param {Boolean} pinned Whether or not the tab is pinned
+ */
+pinnedLinkOut.manipulateAnchors = function(pinned) {
+  // Define `pinned` for good measure
+  if (pinned === undefined) {
+    pinned = false;
+  }
+  // Collect anchor elements
+  var anchors = document.getElementsByTagName('a');
+  for (var i = 0; i < anchors.length; i++) {
+    var anchor = anchors[i];
+    // Test for href with # at the end
+    // Or hrefs that are nothing but '#'
+    // This probably isn't perfect, but it works in limited testing
+    var hrefEnd = anchor.href.substring(anchor.href.length -1);
+    if (hrefEnd && hrefEnd !== '#') {
+      if (pinned) {
+        pinnedLinkOut.addTargetAttribute(anchor)
+      } else if (!pinned) {
+        pinnedLinkOut.removeTargetAttribute(anchor)
+      }
+    }
+  }
+};
+
+/**
+ * Let the background script know we're ready for tab info
  * Receive info about the tab from the background script
  *
  * response.scriptResponse: Dummy text to print to the console
@@ -42,7 +85,7 @@ chrome.extension.sendMessage({message: 'ready'}, function(response) {
 
       if (response.pinnedState) {
         // The tab is pinned
-        pinnedLinkOut.defineLinkBehavior();
+        pinnedLinkOut.manipulateAnchors(true);
       } else {
         // The tab is not pinned
         // Do nothing
@@ -61,10 +104,10 @@ chrome.runtime.onMessage.addListener(
       // The tab updated is related to pinnedState
       if (request.pinnedState.pinned) {
         // The tab was pinned
-        pinnedLinkOut.defineLinkBehavior();
+        pinnedLinkOut.manipulateAnchors(true);
       } else {
         // The tab was unpinned
-        pinnedLinkOut.revertLinkBehavior();
+        pinnedLinkOut.manipulateAnchors(false);
       }
     }
   });
