@@ -19,12 +19,24 @@ chrome.extension.onMessage.addListener(
   });
 
 /**
- * Listen for tab updates (e.g., a tab being pinned or unpinned)
+ * Listen for tab updates
  * Send the information to the content script
  *
- * @param {Object} changeInfo The specific update event fired
+ * Page updates:
+ *   - initial load complete
+ *   - content updates (via ajax for example) complete
+ *   - pinned
+ *   - unpinned
+ *
+ * @param {Object} changeInfo Information about the event (only concerned with `complete` & `pinned`)
  */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-   console.log(changeInfo);
-   chrome.tabs.sendMessage(tabId, {updated: true, pinnedState: changeInfo});
+  if (changeInfo.status === 'complete') {
+    console.log('Tab update complete');
+    console.log('Tab ' + (tab.pinned ? 'is' : 'is not') + ' pinned');
+    chrome.tabs.sendMessage(tabId, {updated: true, pinnedState: tab.pinned});
+  } else if (changeInfo.hasOwnProperty('pinned')) {
+    console.log('Tab ' + (tab.pinned ? 'is now' : 'is no longer') + ' pinned');
+    chrome.tabs.sendMessage(tabId, {updated: true, pinnedState: changeInfo.pinned});
+  }
 });
