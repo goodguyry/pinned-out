@@ -14,7 +14,7 @@ chrome.extension.onMessage.addListener(
     pinnedOut.pinnedState = sender.tab.pinned;
     console.log('inject.js:', request.message);
     if (request.message === 'ready') {
-      sendResponse(pinnedOut);
+      // sendResponse(pinnedOut);
     }
   });
 
@@ -22,7 +22,7 @@ chrome.extension.onMessage.addListener(
  * Listen for tab updates
  * Send the information to the content script
  *
- * Page updates:
+ * Relevant tab updates:
  *   - initial load complete
  *   - content updates (via ajax for example) complete
  *   - pinned
@@ -31,12 +31,13 @@ chrome.extension.onMessage.addListener(
  * @param {Object} changeInfo Information about the event (only concerned with `complete` & `pinned`)
  */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  if (changeInfo.status === 'complete') {
+  if (tab.status === 'complete') {
     console.log('Tab update complete');
-    console.log('Tab ' + (tab.pinned ? 'is' : 'is not') + ' pinned');
-    chrome.tabs.sendMessage(tabId, {updated: true, pinnedState: tab.pinned});
+    console.dir(tab);
+    console.log('Tab ' + (tab.pinned ? 'is' : 'is not') + ' pinned\n');
+    chrome.tabs.sendMessage(tabId, {updated: true, changed: changeInfo, pinnedState: tab.pinned});
   } else if (changeInfo.hasOwnProperty('pinned')) {
-    console.log('Tab ' + (tab.pinned ? 'is now' : 'is no longer') + ' pinned');
-    chrome.tabs.sendMessage(tabId, {updated: true, pinnedState: changeInfo.pinned});
+    console.log('Tab ' + (tab.pinned ? 'is now' : 'is no longer') + ' pinned\n');
+    chrome.tabs.sendMessage(tabId, {updated: true, changed: changeInfo, pinnedState: tab.pinned});
   }
 });

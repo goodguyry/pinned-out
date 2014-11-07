@@ -100,14 +100,21 @@ chrome.extension.sendMessage({message: 'ready'}, function(response) {
  */
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    if (request.pinnedState.hasOwnProperty('pinned')) {
-      // The tab updated is related to pinnedState
-      if (request.pinnedState.pinned) {
-        // The tab was pinned
+    if (request.changed.hasOwnProperty('pinned')) {
+      if (request.changed.pinned) {
+        // the tab is now pinned; it previously wasn't
         pinnedLinkOut.manipulateAnchors(true);
-      } else {
-        // The tab was unpinned
+      }
+      if (!request.changed.pinned) {
+        // the tab was unpinned
         pinnedLinkOut.manipulateAnchors(false);
+      }
+    }
+
+    if (request.changed.status === 'complete') {
+      if (request.pinnedState) {
+        // the tab is pinned
+        pinnedLinkOut.manipulateAnchors(true);
       }
     }
   });
