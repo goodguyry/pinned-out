@@ -97,23 +97,29 @@ chrome.extension.sendMessage({message: 'ready'}, function(response) {
 
 /**
  * Receive message from the background script regarding tab updates
+ *
+ * @param {Object}  request.changed The tab update event
+ * @param {Boolean} request.changed.pinned The tab was pinned or unpinned
+ * @param {String}  request.changed.status The tab's update status; only concerned with 'complete'
  */
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.changed.hasOwnProperty('pinned')) {
       if (request.changed.pinned) {
-        // the tab is now pinned; it previously wasn't
+        // The tab is now pinned; it previously wasn't
         pinnedLinkOut.manipulateAnchors(true);
       }
       if (!request.changed.pinned) {
-        // the tab was unpinned
+        // The tab was unpinned
         pinnedLinkOut.manipulateAnchors(false);
       }
     }
 
     if (request.changed.status === 'complete') {
+      // The page load or content updates complete
       if (request.pinnedState) {
-        // the tab is pinned
+        // The tab is pinned
+        // Using tab.pinned because the update was not pin-related
         pinnedLinkOut.manipulateAnchors(true);
       }
     }
