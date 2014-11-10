@@ -24,3 +24,17 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     chrome.tabs.sendMessage(tabId, {updated: true, changed: changeInfo, pinnedState: tab.pinned});
   }
 });
+
+/**
+ * Retrieve the stored value
+ * If nothing is saved, or the saved state is somehow incompatible, 'default' is stored
+ */
+var storedBehavior = localStorage.getItem('behavior');
+var radios = document.getElementsByName('behavior');
+if (!storedBehavior) {
+  // Nothing is in localStorage
+  localStorage.setItem('behavior', 'default');
+} else if (storedBehavior !== 'external-only') {
+  // Ensure localStorage has compatible saved data
+  localStorage.setItem('behavior', 'default');
+}
