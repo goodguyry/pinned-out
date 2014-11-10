@@ -1,32 +1,6 @@
 var pinnedLinkOut = {};
 
 /**
- * Test for which link behavior setting is selected in options
- */
-pinnedLinkOut.externalOnly = function() {
-  var storedBehavior = localStorage.getItem('behavior');
-  if (storedBehavior === 'external-only') {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-/**
- * Test whether or not the link is an external link
- */
-pinnedLinkOut.testForExternal = function(anchor) {
-  var host = window.location.host;
-  var href = anchor.href;
-  if (href.search(host) == -1) {
-    // This is an external link
-    return true;
-  } else {
-    return false;
-  }
-};
-
-/**
  * Manipulate anchors such that they open in a new tab
  *
  * @param {Object} anchor The anchor element currently being iterated over
@@ -75,18 +49,53 @@ pinnedLinkOut.manipulateAnchors = function(pinned) {
   }
   // Collect anchor elements
   var anchors = document.getElementsByTagName('a');
+  // Get page's host
+  var host = window.location.host;
+
+  // Check saved option
+  var externalOnly;
+  if (pinnedLinkOut.option === 'external-only') {
+    externalOnly = true;
+  } else {
+    externalOnly = false;
+  }
+
+  //Test whether or not the link is an external link
+  function isExternal(anchorHost, host) {
+    if (anchorHost !== host) {
+      // This is an external link
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // Iterate over anchors, testing for various scenarios along the way
   for (var i = 0; i < anchors.length; i++) {
     var anchor = anchors[i];
-    // Test for href with # at the end
-    // Or hrefs that are nothing but '#'
-    // This probably isn't perfect, but it works in limited testing
-    var hrefEnd = anchor.href.substring(anchor.href.length -1);
-    if (hrefEnd && hrefEnd !== '#') {
-      if (pinned) {
-        pinnedLinkOut.addTargetAttribute(anchor)
-      } else if (!pinned) {
-        pinnedLinkOut.removeTargetAttribute(anchor)
+    if (pinned) {
+      // The tab is pinned
+      if (externalOnly) {
+        // The 'external-only' option is set
+        if (isExternal(anchor.host, host)) {
+          // This is an external link
+          // Add target and data attributes
+          pinnedLinkOut.addTargetAttribute(anchor);
+        } // else do nothing
+      } else {
+        // The default option is set
+        // Test for href with # at the end
+        // Or hrefs that are nothing but '#'
+        // This probably isn't perfect, but it works in limited testing
+        var hrefEnd = anchor.href.substring(anchor.href.length -1);
+        if (hrefEnd && hrefEnd !== '#') {
+          // Add target and data attributes
+          pinnedLinkOut.addTargetAttribute(anchor)
+        } // else do nothing
       }
+    } else {
+      // The tab is not pinned
+      pinnedLinkOut.removeTargetAttribute(anchor)
     }
   }
 };
@@ -100,6 +109,9 @@ pinnedLinkOut.manipulateAnchors = function(pinned) {
  */
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
+    if (request.option) {
+      pinnedLinkOut.option = request.option;
+    }
     if (request.changed.hasOwnProperty('pinned')) {
       // The tab was either pinned or unpinned
       if (request.changed.pinned) {
