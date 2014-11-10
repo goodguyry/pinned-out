@@ -1,6 +1,32 @@
 var pinnedLinkOut = {};
 
 /**
+ * Test for which link behavior setting is selected in options
+ */
+pinnedLinkOut.externalOnly = function() {
+  var storedBehavior = localStorage.getItem('behavior');
+  if (storedBehavior === 'external-only') {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+/**
+ * Test whether or not the link is an external link
+ */
+pinnedLinkOut.testForExternal = function(anchor) {
+  var host = window.location.host;
+  var href = anchor.href;
+  if (href.search(host) == -1) {
+    // This is an external link
+    return true;
+  } else {
+    return false;
+  }
+};
+
+/**
  * Manipulate anchors such that they open in a new tab
  *
  * @param {Object} anchor The anchor element currently being iterated over
