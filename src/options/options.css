@@ -56,6 +56,7 @@ table {
 *,
 *:before,
 *:after {
+  -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
@@ -82,10 +83,15 @@ fieldset {
   padding-top: 1em;
 }
 
+div {
+  margin: 0 auto;
+  width: 325px;
+  padding-top: 1em;
+}
+
 legend {
   font-size: 1.25em;
-  text-align: center;
-  margin: 0;
+  width: 100%;
   padding: 0.25em 0.5em;
   border-bottom: 1px solid #ccc;
 }
@@ -98,6 +104,55 @@ label {
 
 label span {
   font-style: italic;
+}
+
+label[for="exclude-list"] {
+  font-size: 1.25em;
+  padding: 0.25em 0.5em;
+  border-bottom: 1px solid #ccc;
+}
+
+label[for="exclude-list"] span {
+  font-size: 0.75em;
+  font-style: normal;
+  display: block;
+}
+
+table {
+  width: 100%;
+  font-family: monospace;
+}
+
+td {
+  padding: 0.75em;
+}
+
+tr:nth-of-type(even) {
+  background-color: #fafafa;
+}
+
+tr:hover {
+  background-color: #f0f0f0;
+}
+
+.add {
+  color: #aaa;
+  font-style: italic;
+}
+
+.domain {
+  width: 90%;
+}
+
+.remove {
+  width: 10%;
+  font-size: 1.125em;
+  text-align: center;
+  cursor: pointer;
+}
+
+.remove:hover {
+  color: red;
 }
 
 input[type="radio"] {
