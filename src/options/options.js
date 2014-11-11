@@ -35,11 +35,13 @@ var addTableRow = function(text, key) {
   var tbody = document.getElementById('excludes');
   var tr = document.createElement('tr');
   var td = document.createElement('td');
+  td.setAttribute('tabindex', 0);
   td.innerText = text;
-  td.setAttribute('data-key', key)
   var tdRemove = document.createElement('td');
   tdRemove.innerText = htmlDecode("&times;");
   tdRemove.setAttribute('class', 'remove');
+  tdRemove.setAttribute('data-key', key)
+  tdRemove.setAttribute('tabindex', 0);
   tr.appendChild(td);
   tr.appendChild(tdRemove);
   tbody.appendChild(tr);
@@ -58,6 +60,22 @@ var collectLocalStorageValues = function() {
   }
 };
 
+var saveNewExcludedSite = function(e) {
+  if (e.target.value !== '') {
+    var timeStamp = new Date().getTime();
+    var property = 'exclude' + timeStamp;
+    localStorage.setItem(property, e.target.value);
+    addTableRow(e.target.value, property)
+    e.target.value = '';
+  }
+};
+
+var removeExcludedSite = function(e) {
+  var key = e.target.dataset.key;
+  localStorage.removeItem(key);
+  e.target.parentElement.remove();
+};
+
 // Collect localStorage values and build the table on load
 document.addEventListener('DOMContentLoaded', collectLocalStorageValues, false);
 
@@ -66,8 +84,40 @@ document.addEventListener('DOMContentLoaded', collectLocalStorageValues, false);
  */
 document.getElementById('behavior').addEventListener('click',
   function(e) {
-    if (e && e.target.nodeName === 'INPUT') {
+    if (e && e.target.type === 'radio') {
       localStorage.setItem('behavior', e.target.value);
     }
   }, false
 );
+
+/**
+ * Add the new site when the return key is pressed while the input has focus
+ * Ignored if the input is empty
+ */
+document.getElementById('add').addEventListener('keydown',
+  function(e) {
+    if (e && e.keyCode === 13) {
+      e.preventDefault();
+      saveNewExcludedSite(e);
+    }
+  }, false);
+
+/**
+ * Remove the site when the × is clicked
+ */
+document.getElementById('excludes').addEventListener('click',
+  function(e){
+    if (e && e.target.classList[0] === 'remove') {
+      removeExcludedSite(e);
+    }
+  }, false);
+
+/**
+ * Remove the site if the spacebar is pressed when the × has focus
+ */
+document.getElementById('excludes').addEventListener('keydown',
+  function(e) {
+    if (e && e.keyCode === 32 && e.target.classList[0] === 'remove') {
+      removeExcludedSite(e);
+    }
+  }, false);
