@@ -135,15 +135,6 @@ tr:hover {
   background-color: #f0f0f0;
 }
 
-.add {
-  color: #aaa;
-  font-style: italic;
-}
-
-.domain {
-  width: 90%;
-}
-
 .remove {
   width: 10%;
   font-size: 1.125em;
@@ -161,4 +152,21 @@ input[type="radio"] {
   height: 1em;
   width: 1em;
   vertical-align: middle;
+}
+
+input[type="text"] {
+  width: 100%;
+  font: inherit;
+  font-family: monospace;
+  margin-top: 1em;
+  padding: 0.5em;
+}
+
+.sr-only {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
