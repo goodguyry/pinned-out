@@ -11,17 +11,45 @@
  * @param {Object} changeInfo Information about the event (only concerned with `complete` & `pinned`)
  */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  function isExcluded(url) {
+    // var excludeState = false;
+    var storage = localStorage;
+    for (key in storage) {
+      if (url.search(storage[key]) > -1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  var excludeState;
   if (changeInfo.hasOwnProperty('pinned')) {
     // The tab was either pinned or unpinned
     console.log('Tab ' + (tab.pinned ? 'is now' : 'is no longer') + ' pinned\n');
-    chrome.tabs.sendMessage(tabId, {updated: true, changed: changeInfo, pinnedState: tab.pinned, option: localStorage['behavior']});
+    excludeState = isExcluded(tab.url);
+
+    chrome.tabs.sendMessage(tabId, {
+      updated: true,
+      changed: changeInfo,
+      pinnedState: tab.pinned,
+      option: localStorage['behavior'],
+      exclude: excludeState
+    });
   } else if (tab.status === 'complete') {
     // Initial page load complete
     // Or content updates complete
     console.log('Tab update complete');
     console.dir(tab);
     console.log('Tab ' + (tab.pinned ? 'is' : 'is not') + ' pinned\n');
-    chrome.tabs.sendMessage(tabId, {updated: true, changed: changeInfo, pinnedState: tab.pinned, option: localStorage['behavior']});
+    excludeState = isExcluded(tab.url);
+
+    chrome.tabs.sendMessage(tabId, {
+      updated: true,
+      changed: changeInfo,
+      pinnedState: tab.pinned,
+      option: localStorage['behavior'],
+      exclude: excludeState
+    });
   }
 });
 
