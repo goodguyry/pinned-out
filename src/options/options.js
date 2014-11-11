@@ -35,7 +35,6 @@ var addTableRow = function(text, key) {
   var tbody = document.getElementById('excludes');
   var tr = document.createElement('tr');
   var td = document.createElement('td');
-  td.setAttribute('tabindex', 0);
   td.innerText = text;
   var tdRemove = document.createElement('td');
   tdRemove.innerText = htmlDecode("&times;");
