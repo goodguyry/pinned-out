@@ -8,7 +8,7 @@
 
 <body>
 
-  <form id="behavior" action="" method="post">
+  <div id="behavior">
     <fieldset>
       <legend>Link behavior for pinned tabs</legend>
       <label for="default">
@@ -19,18 +19,20 @@
         <input id="external" name="behavior" type="radio" value="external-only"/>
         Only open <span>external</span> links in a new tab
       </label>
-      <div>
-        <label for="exclude-list">Do nothing on these websites</label>
-        <table>
-          <tbody id="excludes">
-            <!-- Excluded domains here -->
-          </tbody>
-        </table>
-        <label for="add" class="sr-only">Add a new site to exclude</label>
-        <input id="add" type="text" value="" placeholder="Add a site" />
-      </div>
     </fieldset>
-  </form>
+  </div>
+
+  <div>
+    <h2>Do nothing on these websites</h2>
+    <table>
+      <tbody id="excludes">
+        <!-- Excluded domains here -->
+      </tbody>
+    </table>
+    <label for="add" class="sr-only">Add a new site to exclude</label>
+    <input id="add" type="text" value="" placeholder="Add a site" autocomplete="off" autocorrect="off" autocapitalize="off" />
+  </div>
+
   <script src="options.js"></script>
 
 </body>
