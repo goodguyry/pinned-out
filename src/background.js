@@ -28,6 +28,12 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     console.log('Tab ' + (tab.pinned ? 'is now' : 'is no longer') + ' pinned\n');
     excludeState = isExcluded(tab.url);
 
+    if (tab.pinned) {
+      chrome.pageAction.show(tab.id);
+    } else {
+      chrome.pageAction.hide(tab.id);
+    }
+
     chrome.tabs.sendMessage(tabId, {
       updated: true,
       changed: changeInfo,
@@ -42,6 +48,12 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     console.dir(tab);
     console.log('Tab ' + (tab.pinned ? 'is' : 'is not') + ' pinned\n');
     excludeState = isExcluded(tab.url);
+
+    if (tab.pinned) {
+      chrome.pageAction.show(tab.id);
+    } else {
+      chrome.pageAction.hide(tab.id);
+    }
 
     chrome.tabs.sendMessage(tabId, {
       updated: true,
