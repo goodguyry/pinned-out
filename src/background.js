@@ -12,8 +12,9 @@
  */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   function isExcluded(url) {
-    // var excludeState = false;
     var storage = localStorage;
+    // This check can be moved to content-script.js
+    // var storage = chrome.storage.sync.get(null, function(items) {...});
     for (key in storage) {
       if (url.search(storage[key]) > -1) {
         return true;
@@ -38,7 +39,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       updated: true,
       changed: changeInfo,
       pinnedState: tab.pinned,
+      // option no longer needs to be passed
       option: localStorage['behavior'],
+      // exclude no longer needs to be passed
       exclude: excludeState
     });
   } else if (tab.status === 'complete') {
@@ -59,7 +62,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       updated: true,
       changed: changeInfo,
       pinnedState: tab.pinned,
+      // option no longer needs to be passed
       option: localStorage['behavior'],
+      // exclude no longer needs to be passed
       exclude: excludeState
     });
   }
@@ -70,11 +75,14 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
  * If nothing is saved, or the saved state is somehow incompatible, 'default' is stored
  */
 var storedBehavior = localStorage.getItem('behavior');
+// chrome.storage.sync.get('behavior', function(items) {...});
 var radios = document.getElementsByName('behavior');
 if (!storedBehavior) {
   // Nothing is in localStorage
   localStorage.setItem('behavior', 'default');
+  // chrome.storage.sync.set({'behavior': 'default'});
 } else if (storedBehavior !== 'external-only') {
   // Ensure localStorage has compatible saved data
   localStorage.setItem('behavior', 'default');
+  // chrome.storage.sync.set({'behavior': 'default'});
 }
