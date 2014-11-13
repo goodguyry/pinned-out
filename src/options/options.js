@@ -3,17 +3,16 @@
  * Restore the saved state by matching the stored value to the radio button's value
  * If nothing is saved, or the saved state is somehow incompatible, 'default' is stored
  */
-var storedBehavior = localStorage.getItem('behavior');
-// chrome.storage.sync.get('behavior', function(items) {...});
-var radios = document.getElementsByName('behavior');
-if (storedBehavior === radios[1].value) {
-  radios[1].checked = true;
-} else {
-  radios[0].checked = true;
-  // In case nothing is in localStorage
-  localStorage.setItem('behavior', 'default');
-  // chrome.storage.sync.set({'behavior': 'default'});
-}
+chrome.storage.sync.get('behavior', function(items) {
+  var radios = document.getElementsByName('behavior');
+  if (items.behavior === radios[1].value) {
+    radios[1].checked = true;
+  } else {
+    radios[0].checked = true;
+    // In case nothing is in storage
+    chrome.storage.sync.set({'behavior': 'default'});
+  }
+});
 
 /**
  * Decode HTML entities
@@ -49,48 +48,46 @@ var addTableRow = function(text, key) {
 };
 
 /**
- * Collect localStorage values and pass to addTableRow
+ * Collect storage values and pass to addTableRow
  * 'behavior' is ignored for obvious reasons
  */
-var collectLocalStorageValues = function() {
-  var storage = localStorage;
-  // chrome.storage.sync.get(null, function(items) {...});
-  for (var site in storage) {
-    if (site !== 'behavior') {
-      addTableRow(storage[site], site);
+var collectStorageValues = function() {
+  chrome.storage.sync.get(null, function(items) {
+    for (var site in items) {
+      if (site !== 'behavior') {
+        addTableRow(items[site], site);
+      }
     }
-  }
+  });
 };
 
 var saveNewExcludedSite = function(e) {
   if (e.target.value !== '') {
+    var item = {};
     var timeStamp = new Date().getTime();
-    var property = 'exclude' + timeStamp;
-    localStorage.setItem(property, e.target.value);
-    // chrome.storage.sync.set({property: e.target.value});
-    addTableRow(e.target.value, property)
+    item[timeStamp] = e.target.value;
+    chrome.storage.sync.set(item);
+    addTableRow(e.target.value, timeStamp)
     e.target.value = '';
   }
 };
 
 var removeExcludedSite = function(e) {
   var key = e.target.dataset.key;
-  localStorage.removeItem(key);
-  // chrome.storage.sync.remove(key);
+  chrome.storage.sync.remove(key);
   e.target.parentElement.remove();
 };
 
-// Collect localStorage values and build the table on load
-document.addEventListener('DOMContentLoaded', collectLocalStorageValues, false);
+// Collect storage values and build the table on load
+document.addEventListener('DOMContentLoaded', collectStorageValues, false);
 
 /**
- * Save the clicked radio button's value to localStorage
+ * Save the clicked radio button's value to storage
  */
 document.getElementById('behavior').addEventListener('click',
   function(e) {
     if (e && e.target.type === 'radio') {
-      localStorage.setItem('behavior', e.target.value);
-      // chrome.storage.sync.set({'behavior': e.target.value});
+      chrome.storage.sync.set({'behavior': e.target.value});
     }
   }, false
 );

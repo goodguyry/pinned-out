@@ -14,7 +14,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   function isExcluded(url) {
     var storage = localStorage;
     // This check can be moved to content-script.js
-    // var storage = chrome.storage.sync.get(null, function(items) {...});
+    // chrome.storage.sync.get(null, function(items) {...});
     for (key in storage) {
       if (url.search(storage[key]) > -1) {
         return true;
@@ -74,15 +74,13 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
  * Retrieve the stored value
  * If nothing is saved, or the saved state is somehow incompatible, 'default' is stored
  */
-var storedBehavior = localStorage.getItem('behavior');
-// chrome.storage.sync.get('behavior', function(items) {...});
-var radios = document.getElementsByName('behavior');
-if (!storedBehavior) {
-  // Nothing is in localStorage
-  localStorage.setItem('behavior', 'default');
-  // chrome.storage.sync.set({'behavior': 'default'});
-} else if (storedBehavior !== 'external-only') {
-  // Ensure localStorage has compatible saved data
-  localStorage.setItem('behavior', 'default');
-  // chrome.storage.sync.set({'behavior': 'default'});
-}
+chrome.storage.sync.get('behavior', function(items) {
+  var radios = document.getElementsByName('behavior');
+  if (!items.behavior) {
+    // Nothing is in storage
+    chrome.storage.sync.set({'behavior': 'default'});
+  } else if (items.behavior !== 'external-only') {
+    // Ensure storage has compatible saved data
+    chrome.storage.sync.set({'behavior': 'default'});
+  }
+});
