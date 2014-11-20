@@ -11,63 +11,31 @@
  * @param {Object} changeInfo Information about the event (only concerned with `complete` & `pinned`)
  */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  function isExcluded(url) {
-    var storage = localStorage;
-    // This check can be moved to content-script.js
-    // chrome.storage.sync.get(null, function(items) {...});
-    for (key in storage) {
-      if (url.search(storage[key]) > -1) {
-        return true;
+
+  if (tab.pinned) {
+    chrome.pageAction.show(tab.id);
+  } else {
+    chrome.pageAction.hide(tab.id);
+  }
+
+  chrome.storage.sync.get(null, function(items) {
+    var excludeState = false;
+    for (var key in items) {
+      if (tab.url.search(items[key]) > -1) {
+        excludeState = true;
       }
     }
-    return false;
-  }
-
-  var excludeState;
-  if (changeInfo.hasOwnProperty('pinned')) {
-    // The tab was either pinned or unpinned
-    console.log('Tab ' + (tab.pinned ? 'is now' : 'is no longer') + ' pinned\n');
-    excludeState = isExcluded(tab.url);
-
-    if (tab.pinned) {
-      chrome.pageAction.show(tab.id);
-    } else {
-      chrome.pageAction.hide(tab.id);
-    }
-
     chrome.tabs.sendMessage(tabId, {
       updated: true,
       changed: changeInfo,
       pinnedState: tab.pinned,
       // option no longer needs to be passed
-      option: localStorage['behavior'],
+      option: items.behavior,
       // exclude no longer needs to be passed
       exclude: excludeState
     });
-  } else if (tab.status === 'complete') {
-    // Initial page load complete
-    // Or content updates complete
-    console.log('Tab update complete');
-    console.dir(tab);
-    console.log('Tab ' + (tab.pinned ? 'is' : 'is not') + ' pinned\n');
-    excludeState = isExcluded(tab.url);
+  });
 
-    if (tab.pinned) {
-      chrome.pageAction.show(tab.id);
-    } else {
-      chrome.pageAction.hide(tab.id);
-    }
-
-    chrome.tabs.sendMessage(tabId, {
-      updated: true,
-      changed: changeInfo,
-      pinnedState: tab.pinned,
-      // option no longer needs to be passed
-      option: localStorage['behavior'],
-      // exclude no longer needs to be passed
-      exclude: excludeState
-    });
-  }
 });
 
 /**
