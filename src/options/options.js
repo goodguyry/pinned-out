@@ -40,7 +40,7 @@ var addTableRow = function(text, key) {
   var tdRemove = document.createElement('td');
   tdRemove.innerText = htmlDecode("&times;");
   tdRemove.setAttribute('class', 'remove');
-  tdRemove.setAttribute('data-key', key)
+  tdRemove.setAttribute('data-key', key);
   tdRemove.setAttribute('tabindex', 0);
   tr.appendChild(td);
   tr.appendChild(tdRemove);
@@ -67,7 +67,7 @@ var saveNewExcludedSite = function(e) {
     var timeStamp = new Date().getTime();
     item[timeStamp] = e.target.value;
     chrome.storage.sync.set(item);
-    addTableRow(e.target.value, timeStamp)
+    addTableRow(e.target.value, timeStamp);
     e.target.value = '';
   }
 };

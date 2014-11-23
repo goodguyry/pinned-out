@@ -90,12 +90,12 @@ pinnedLinkOut.manipulateAnchors = function(pinned) {
         var hrefEnd = anchor.href.substring(anchor.href.length -1);
         if (hrefEnd && hrefEnd !== '#') {
           // Add target and data attributes
-          pinnedLinkOut.addTargetAttribute(anchor)
+          pinnedLinkOut.addTargetAttribute(anchor);
         } // else do nothing
       }
     } else {
       // The tab is not pinned
-      pinnedLinkOut.removeTargetAttribute(anchor)
+      pinnedLinkOut.removeTargetAttribute(anchor);
     }
   }
 };
