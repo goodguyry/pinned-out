@@ -62,14 +62,18 @@ var collectStorageValues = function() {
 };
 
 /**
- * Clean user input
  * Extract the domain from the input value
+ *
+ * @param {String} text The value from the input
  */
 var cleanInput = function(text) {
   var pattern = /(?:www\.)?([a-z0-9\-.]+)(?:\.[a-z\.]+)/i;
   return text.match(pattern)[0];
 };
 
+/**
+ * Save the value from the input
+ */
 var saveNewExcludedSite = function(e) {
   if (e.target.value !== '') {
     var item = {};
@@ -82,6 +86,9 @@ var saveNewExcludedSite = function(e) {
   }
 };
 
+/**
+ * Remove the selected site
+ */
 var removeExcludedSite = function(e) {
   var key = e.target.dataset.key;
   chrome.storage.sync.remove(key);
