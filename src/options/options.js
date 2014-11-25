@@ -61,13 +61,23 @@ var collectStorageValues = function() {
   });
 };
 
+/**
+ * Clean user input
+ * Extract the domain from the input value
+ */
+var cleanInput = function(text) {
+  var pattern = /(?:www\.)?([a-z0-9\-.]+)(?:\.[a-z\.]+)/i;
+  return text.match(pattern)[0];
+};
+
 var saveNewExcludedSite = function(e) {
   if (e.target.value !== '') {
     var item = {};
     var timeStamp = new Date().getTime();
     item[timeStamp] = e.target.value;
     chrome.storage.sync.set(item);
-    addTableRow(e.target.value, timeStamp);
+    var output = cleanInput(e.target.value);
+    addTableRow(output, timeStamp);
     e.target.value = '';
   }
 };
