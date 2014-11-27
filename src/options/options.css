@@ -39,6 +39,15 @@ div {
   border: 1px solid #ccc;
 }
 
+h1 {
+  text-align: center;
+}
+
+p {
+  font-size: small;
+  text-align: center;
+}
+
 /* Section headings */
 h2,
 legend {
