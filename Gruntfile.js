@@ -105,21 +105,24 @@ module.exports = function(grunt) {
         files: ['src/*', 'src/**/*'],
         tasks: ['jshint', 'copy:js'],
         options: {
-          spawn: false
+          spawn: false,
+          livereload: true
         }
       },
       css: {
         files: ['src/**/*'],
         tasks: ['copy:css'],
         options: {
-          spawn: false
+          spawn: false,
+          livereload: true
         }
       },
       html: {
         files: ['src/**/*'],
         tasks: ['copy:html'],
         options: {
-          spawn: false
+          spawn: false,
+          livereload: true
         }
       }
     }
