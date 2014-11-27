@@ -16,8 +16,8 @@ body, h1, p, span, label, input {
 
 body {
   padding: 1em;
-  height: 8.5em;
-  width: 12em;
+  height: 5.5em;
+  width: 22em;
   font-family: serif;
   font-size: medium;
   color: #333;
@@ -29,11 +29,11 @@ h1 {
   font-weight: bold;
 }
 
-p {
-  font-size: 0.875em;
-  margin-top: 0.875em;
-}
-
 input {
   margin-right: 0.5em;
+}
+
+span {
+  font-family: monospace;
+  font-size: medium;
 }
