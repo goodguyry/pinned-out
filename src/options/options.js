@@ -77,9 +77,12 @@ var cleanInput = function(text) {
 var saveNewExcludedSite = function(e) {
   if (e.target.value !== '') {
     var item = {};
+    // Create the timestamp (key)
     var timeStamp = new Date().getTime();
+    // Extract the domain from the URL
     var output = cleanInput(e.target.value);
     item[timeStamp] = output;
+    // Save the domain
     chrome.storage.sync.set(item);
     addTableRow(output, timeStamp);
     e.target.value = '';
