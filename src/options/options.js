@@ -78,9 +78,9 @@ var saveNewExcludedSite = function(e) {
   if (e.target.value !== '') {
     var item = {};
     var timeStamp = new Date().getTime();
-    item[timeStamp] = e.target.value;
-    chrome.storage.sync.set(item);
     var output = cleanInput(e.target.value);
+    item[timeStamp] = output;
+    chrome.storage.sync.set(item);
     addTableRow(output, timeStamp);
     e.target.value = '';
   }
