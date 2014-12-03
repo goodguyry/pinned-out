@@ -90,11 +90,26 @@ var saveNewExcludedSite = function(e) {
 };
 
 /**
+ * Move focus to the appropriate element after one is removed
+ */
+var moveFocus = function(element) {
+  var row = element.parentElement;
+  if (row.nextElementSibling) {
+    // Move focus to next row's remove element
+    row.nextElementSibling.getElementsByClassName('remove')[0].focus();
+  } else if (row.previousElementSibling) {
+    // Move focus to the previous row's remove element
+    row.previousElementSibling.getElementsByClassName('remove')[0].focus();
+  }
+};
+
+/**
  * Remove the selected site
  */
 var removeExcludedSite = function(e) {
   var key = e.target.dataset.key;
   chrome.storage.sync.remove(key);
+  moveFocus(e.target);
   e.target.parentElement.remove();
 };
 
