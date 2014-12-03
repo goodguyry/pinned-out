@@ -90,12 +90,12 @@ pinnedLinkOut.manipulateAnchors = function(pinned) {
         var hrefEnd = anchor.href.substring(anchor.href.length -1);
         if (hrefEnd && hrefEnd !== '#') {
           // Add target and data attributes
-          pinnedLinkOut.addTargetAttribute(anchor)
+          pinnedLinkOut.addTargetAttribute(anchor);
         } // else do nothing
       }
     } else {
       // The tab is not pinned
-      pinnedLinkOut.removeTargetAttribute(anchor)
+      pinnedLinkOut.removeTargetAttribute(anchor);
     }
   }
 };
@@ -109,24 +109,27 @@ pinnedLinkOut.manipulateAnchors = function(pinned) {
  */
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    if (request.option) {
-      pinnedLinkOut.option = request.option;
-    }
-    if (request.changed.hasOwnProperty('pinned')) {
-      // The tab was either pinned or unpinned
-      if (request.changed.pinned) {
-        // The tab is now pinned; it previously wasn't
-        pinnedLinkOut.manipulateAnchors(true);
-      } else {
-        // The tab was unpinned
-        pinnedLinkOut.manipulateAnchors(false);
+    if (!request.exclude) {
+      // This website is not excluded in options
+      if (request.option) {
+        pinnedLinkOut.option = request.option;
       }
-    } else if (request.changed.status === 'complete') {
-      // The page load or content updates are complete
-      if (request.pinnedState) {
-        // The tab is pinned
-        // Using tab.pinned because the update was not pin-related
-        pinnedLinkOut.manipulateAnchors(true);
+      if (request.changed.hasOwnProperty('pinned')) {
+        // The tab was either pinned or unpinned
+        if (request.changed.pinned) {
+          // The tab is now pinned; it previously wasn't
+          pinnedLinkOut.manipulateAnchors(true);
+        } else {
+          // The tab was unpinned
+          pinnedLinkOut.manipulateAnchors(false);
+        }
+      } else if (request.changed.status === 'complete') {
+        // The page load or content updates are complete
+        if (request.pinnedState) {
+          // The tab is pinned
+          // Using tab.pinned because the update was not pin-related
+          pinnedLinkOut.manipulateAnchors(true);
+        }
       }
     }
   });

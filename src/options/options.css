@@ -2,62 +2,23 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+body, div, h2,  span,
+legend, fieldset, label, input,
+table, td, tr {
   margin: 0;
   padding: 0;
   border: 0;
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
-}
-
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-  display: block;
-}
-
-body {
-  line-height: 1;
-}
-
-ol, ul {
-  list-style: none;
-}
-
-blockquote, q {
-  quotes: none;
-}
-
-blockquote:before, blockquote:after,
-q:before, q:after {
-  content: '';
-  content: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 table {
   border-collapse: collapse;
   border-spacing: 0;
-}
-
-*,
-*:before,
-*:after {
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
 }
 
 /* End reset */
@@ -66,44 +27,128 @@ body {
   font-size: large;
   font-family: serif;
   color: #333;
+  padding-top: 5vh;
+  line-height: 1;
 }
 
-form {
-  width: 400px;
+/* Section containers */
+div {
+  width: 365px;
   padding: 1em;
-  margin: 10vh auto 0 auto;
+  margin: 0 auto 2em auto;
   border: 1px solid #ccc;
 }
 
-fieldset {
-  display: block;
-  margin: 0 auto;
-  width: 325px;
-  padding-top: 1em;
+h1 {
+  text-align: center;
 }
 
+p {
+  font-size: small;
+  text-align: center;
+}
+
+/* Section headings */
+h2,
 legend {
   font-size: 1.25em;
-  text-align: center;
-  margin: 0;
+  width: 100%;
   padding: 0.25em 0.5em;
-  border-bottom: 1px solid #ccc;
 }
 
+  /* "Underline" for the heading */
+  /* The bottom border for the h2 is faked by a border on the table rows */
+  legend {
+    border-bottom: 1px solid #ccc;
+  }
+
+/* Radio button container */
+fieldset {
+  padding-top: 0.5em;
+}
+
+/* Input labels */
 label {
   display: block;
   padding: 0.25em 0.5em;
   cursor: pointer;
 }
 
-label span {
-  font-style: italic;
+  /* Italic emphasis in labels */
+  label span {
+    font-style: italic;
+  }
+
+/* Begin table */
+table {
+  width: 100%;
+  font-family: monospace;
 }
 
+  /* Padding for each row's data */
+  td {
+    padding: 0.75em;
+  }
+
+  /* Border on rows to fake heading underline */
+  tr {
+    border-top: 1px solid #ccc;
+    transition: background-color 200ms;
+  }
+
+    /* Hover color for table rows */
+    tr:hover {
+      background-color: #f3f3f3;
+    }
+
+      /* Alter .remove when rows are highlighted */
+      tr:hover > .remove {
+        color: #f00;
+      }
+
+  /* The remove icon (&times;) */
+  .remove {
+    width: 10%;
+    font-size: 1.125em;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 200ms;
+  }
+
+    /* Highlight .remove clickable area on hover */
+    tr:hover > .remove:hover {
+      color: red;
+      background-color: #ffcccc;
+    }
+
+/* Radio buttons */
 input[type="radio"] {
   font-size: inherit;
   cursor: pointer;
   height: 1em;
   width: 1em;
   vertical-align: middle;
+}
+
+/* Text input */
+input[type="text"] {
+  width: 100%;
+  font: inherit;
+  font-family: monospace;
+  padding: 0.75em;
+  background: none;
+  border: 1px solid #ccc;
+  margin: 0;
+  text-align: left;
+  vertical-align: top;
+}
+
+/* Hidden from visual browsers */
+.sr-only {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
