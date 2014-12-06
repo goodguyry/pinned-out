@@ -1,9 +1,9 @@
 var pinnedOut = {};
 
 // Get checkbox
-var pinnedOut.checkbox = document.getElementById('exclude');
+pinnedOut.checkbox = document.getElementById('exclude');
 // Get the output span in the label
-var pinnedOut.domain = document.getElementById('domain');
+pinnedOut.domain = document.getElementById('domain');
 
 /**
  * Extract the domain from a URL
