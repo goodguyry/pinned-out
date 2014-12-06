@@ -5,9 +5,9 @@
   "description": "Pinned Out sets links in pinned tabs to open in a new tab.",
   "homepage_url": "http://github.com/goodguyry/pinned-out",
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/icon32.png",
+    "48": "icons/icon96.png",
+    "128": "icons/icon256.png"
   },
   "background": {
     "scripts": [
@@ -17,7 +17,7 @@
   },
   "options_page": "options.html",
   "page_action": {
-    "default_icon": "icons/icon19.png",
+    "default_icon": "icons/icon38.png",
     "default_title": "Exclude this domain",
     "default_popup": "page-action.html"
   },
