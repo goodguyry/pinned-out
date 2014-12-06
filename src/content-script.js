@@ -1,11 +1,11 @@
-var pinnedLinkOut = {};
+var pinnedOut = {};
 
 /**
  * Manipulate anchors such that they open in a new tab
  *
  * @param {Object} anchor The anchor element currently being iterated over
  */
-pinnedLinkOut.addTargetAttribute = function(anchor) {
+pinnedOut.addTargetAttribute = function(anchor) {
   // Test for target="_blank"
   // We don't want to add target attributes where they already exist
   var target = anchor.getAttribute('target');
@@ -23,7 +23,7 @@ pinnedLinkOut.addTargetAttribute = function(anchor) {
  *
  * @param {Object} anchor The anchor element currently being iterated over
  */
-pinnedLinkOut.removeTargetAttribute = function(anchor) {
+pinnedOut.removeTargetAttribute = function(anchor) {
   // Test for the data-xtab attribute
   // Only remove the target attribute from anchors with data-xtab
   // This way we avoid removing attributes added by the author
@@ -42,7 +42,7 @@ pinnedLinkOut.removeTargetAttribute = function(anchor) {
  *
  * @param {Boolean} pinned Whether or not the tab is pinned
  */
-pinnedLinkOut.manipulateAnchors = function(pinned) {
+pinnedOut.manipulateAnchors = function(pinned) {
   // Define `pinned` for good measure
   if (pinned === undefined) {
     pinned = false;
@@ -54,7 +54,7 @@ pinnedLinkOut.manipulateAnchors = function(pinned) {
 
   // Check saved option
   var externalOnly;
-  if (pinnedLinkOut.option === 'external-only') {
+  if (pinnedOut.option === 'external-only') {
     externalOnly = true;
   } else {
     externalOnly = false;
@@ -80,7 +80,7 @@ pinnedLinkOut.manipulateAnchors = function(pinned) {
         if (isExternal(anchor.host, host)) {
           // This is an external link
           // Add target and data attributes
-          pinnedLinkOut.addTargetAttribute(anchor);
+          pinnedOut.addTargetAttribute(anchor);
         } // else do nothing
       } else {
         // The default option is set
@@ -90,12 +90,12 @@ pinnedLinkOut.manipulateAnchors = function(pinned) {
         var hrefEnd = anchor.href.substring(anchor.href.length -1);
         if (hrefEnd && hrefEnd !== '#') {
           // Add target and data attributes
-          pinnedLinkOut.addTargetAttribute(anchor);
+          pinnedOut.addTargetAttribute(anchor);
         } // else do nothing
       }
     } else {
       // The tab is not pinned
-      pinnedLinkOut.removeTargetAttribute(anchor);
+      pinnedOut.removeTargetAttribute(anchor);
     }
   }
 };
@@ -112,23 +112,23 @@ chrome.runtime.onMessage.addListener(
     if (!request.exclude) {
       // This website is not excluded in options
       if (request.option) {
-        pinnedLinkOut.option = request.option;
+        pinnedOut.option = request.option;
       }
       if (request.changed.hasOwnProperty('pinned')) {
         // The tab was either pinned or unpinned
         if (request.changed.pinned) {
           // The tab is now pinned; it previously wasn't
-          pinnedLinkOut.manipulateAnchors(true);
+          pinnedOut.manipulateAnchors(true);
         } else {
           // The tab was unpinned
-          pinnedLinkOut.manipulateAnchors(false);
+          pinnedOut.manipulateAnchors(false);
         }
       } else if (request.changed.status === 'complete') {
         // The page load or content updates are complete
         if (request.pinnedState) {
           // The tab is pinned
           // Using tab.pinned because the update was not pin-related
-          pinnedLinkOut.manipulateAnchors(true);
+          pinnedOut.manipulateAnchors(true);
         }
       }
     }
