@@ -108,7 +108,7 @@ pinnedOut.manipulateAnchors = function(pinned) {
  * @param {String}  request.changed.status The tab's update status; only concerned with 'complete'
  */
 chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
+  function(request) {
     if (!request.exclude) {
       // This website is not excluded in options
       if (request.option) {

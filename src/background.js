@@ -43,7 +43,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
  * If nothing is saved, or the saved state is somehow incompatible, 'default' is stored
  */
 chrome.storage.sync.get('behavior', function(items) {
-  var radios = document.getElementsByName('behavior');
   if (!items.behavior) {
     // Nothing is in storage
     chrome.storage.sync.set({'behavior': 'default'});

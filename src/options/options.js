@@ -39,7 +39,7 @@ pinnedOut.addTableRow = function(text, key) {
   var td = document.createElement('td');
   td.innerText = text;
   var tdRemove = document.createElement('td');
-  tdRemove.innerText = pinnedOut.htmlDecode("&times;");
+  tdRemove.innerText = pinnedOut.htmlDecode('&times;');
   tdRemove.setAttribute('class', 'remove');
   tdRemove.setAttribute('data-key', key);
   tdRemove.setAttribute('tabindex', 0);
