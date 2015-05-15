@@ -30,7 +30,10 @@ module.exports = function(grunt) {
       options: {
         report: 'min',
         mangle: false,
-        banner: '<%= banner %>\n\n'
+        banner: '<%= banner %>\n\n',
+        compress: {
+          drop_console: true
+        }
       },
       deploy: {
         expand: true,
