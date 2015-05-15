@@ -13,8 +13,8 @@ pinnedOut.addTargetAttribute = function(anchor) {
     console.log('Create new tabs');
     // Add target="_blank"
     anchor.setAttribute('target', '_blank');
-    // Add data-xtab to flag anchors we've updated
-    anchor.setAttribute('data-xtab', 'pinned');
+    // Add data-pinnedOut to flag anchors we've updated
+    anchor.setAttribute('data-pinnedOut', 'pinned');
   }
 };
 
@@ -24,16 +24,16 @@ pinnedOut.addTargetAttribute = function(anchor) {
  * @param {Object} anchor The anchor element currently being iterated over
  */
 pinnedOut.removeTargetAttribute = function(anchor) {
-  // Test for the data-xtab attribute
-  // Only remove the target attribute from anchors with data-xtab
+  // Test for the data-pinnedOut attribute
+  // Only remove the target attribute from anchors with data-pinnedOut
   // This way we avoid removing attributes added by the author
-  var dataPinnned = anchor.getAttribute('data-xtab');
+  var dataPinnned = anchor.getAttribute('data-pinnedOut');
   if (dataPinnned) {
     console.log('Revert tab behavior');
     // Remove target attribute
     anchor.removeAttribute('target');
-    // Remove data-xtab attribute
-    anchor.removeAttribute('data-xtab');
+    // Remove data-pinnedOut attribute
+    anchor.removeAttribute('data-pinnedOut');
   }
 };
 
