@@ -7,7 +7,7 @@ For anyone, like me, who pins tabs for a reason.
 
 ## Features
 
-- Exclude domains form being affected
+- Exclude domains from being affected
 - Option to open all links or only external links in a new tab
 - Syncs options across computers[\*](#known-issues)
 
@@ -41,7 +41,7 @@ npm install --save-dev
 grunt
 ```
 
-Now you're ready to [manually install](http://developer.chrome.com/extensions/packaging.html) CQ Helper. Be sure to choose the ```/build``` directory when asked to specify the _"Extension root directory"_.
+Now you're ready to [manually install](http://developer.chrome.com/extensions/packaging.html) Pinned Out. Be sure to choose the ```/build``` directory when asked to specify the _"Extension root directory"_.
 
 ## Known issues
 
